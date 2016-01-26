@@ -35,7 +35,7 @@ def chungism():
     else:
         return 'You shall not POST'
 
-@app.route('md5', methods=['GET', 'POST'])
+@app.route('/md5', methods=['GET', 'POST'])
 def md5():
     if request.method == 'POST':
         if request.form['text']:
