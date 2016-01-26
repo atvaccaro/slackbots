@@ -11,6 +11,9 @@ def hello():
 def morse():
     if request.method == 'POST':
         if request.form['text']:
+            chars = list(request.form['text'])
+            if any([not c.isalnum() for c in chars]):
+                return 'Unacceptable input, my dear friend.'
             return jsonify(response_type = 'in_channel', text = morse_script.encode_morse(request.form['text']))
         else:
             return "You need to add text to convert"
@@ -21,6 +24,9 @@ def morse():
 def demorse():
     if request.method == 'POST':
         if request.form['text']:
+            chars = list(request.form['text'])
+            if any([c not in '-. ' for c in chars]):
+                return 'Unacceptable input, my dear friend.'
             return jsonify(response_type = 'in_channel', text = morse_script.decode_morse(request.form['text']))
         else:
             return "You need to add text to convert"

@@ -5,11 +5,13 @@ from slackclient import SlackClient
 token = 'xoxb-19193098289-BqJYZV68gmpYqx0VAQrbPdiY'
 my_usercode = 'U0K5P2W8H'
 my_username = 'Daniel-san'
+daniel_usercode = 'U0D1SEBV0'
 
 sc = SlackClient(token)
 if sc.rtm_connect():
     # Get our list of users
     users = sc.api_call('users.list')
+    print users
     time_since_users_update = 0
     while True:
         messages = sc.rtm_read()
@@ -20,7 +22,7 @@ if sc.rtm_connect():
                 users = sc.api_call('user.list')
 
             elif message['type'] == 'message':
-                if 'daniel' in message['text'].lower() and message['user'] != my_usercode:
+                if message['user'] == daniel_usercode or '@daniel.kim17' in message['text']:
                     channel = message['channel']
                     text = 'Go to class, Daniel!'
                     sc.api_call('chat.postMessage', channel=channel, text=text, token=token, username=my_username, as_user='true')
