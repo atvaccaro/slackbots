@@ -36,9 +36,3 @@ if sc.rtm_connect():
             time_since_users_update = 0
 else:
     print "Connection Failed, invalid token?"
-'''
-print sc.api_call('api.test')
-print sc.api_call('channels.list')
-channel_info = json.loads(sc.api_call('channels.info', channel='C0K5UALP8'))
-print channel_info['channel']['topic']
-'''
