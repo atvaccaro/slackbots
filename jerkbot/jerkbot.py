@@ -1,7 +1,16 @@
 import time, json
+import permissions, users, beers, commands, reddit, define
 from slackclient import SlackClient
 from praw import Reddit
-from config import
+from config import slack_token, slack_usercode, slack_username
+import signal, sys
+
+def signal_handler(signal, frame):
+        print 'Saving to db...'
+        permissions.save_to_db()
+        print 'Shutting down. Bye!'
+        sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 sc = SlackClient(token)
 if sc.rtm_connect():

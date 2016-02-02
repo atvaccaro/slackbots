@@ -14,7 +14,7 @@ class PermissionManager(object):
 
     def save_to_db(self):
         for usercode,permission in permissions.iteritems():
-            db.update_permission(usercode, permissions)
+            self.update_permission(usercode, permissions)
 
     def get_permission(self, usercode):
         return self.permissions[usercode]

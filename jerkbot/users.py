@@ -1,15 +1,20 @@
+import config
 from db import cursor
 
-class UserManager(object):
-    def __init__(self):
+class NameManager(object):
+    def __init__(self)  :
         self.users = {}
-        for row in get_all_users():
-            users[row[0]] = row[1]
+        for row in self.get_all_users():
+            users[row[1]] = row[2]
 
     def get_all_users():
         return cursor.execute('SELECT * FROM user')
 
-    def add_new_user(usercode, username, permission='user', beers=config.starting_beers):
+    def save_all_users():
+        for usercode,username in self.users.iteritems():
+            self.add_or_update_user(usercode, username)
+
+    def add_user(usercode, username, permission=Permission.USER, beers=config.starting_beers):
         cursor.execute('INSERT INTO user VALUES (NULL, ?, ?, ?, ?)', (usercode, username, permission, beers))
         conn.commit()
 
