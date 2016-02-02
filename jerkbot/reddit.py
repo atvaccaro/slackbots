@@ -7,4 +7,8 @@ def circlejerk():
     pass
 
 def get_top_post(subreddit=None):
-    pass
+    subreddit = r.get_subreddit('askreddit')
+    submission = subreddit.get_hot().next()
+    print(submission.title)
+    print(submission.stickied)
+    return submission
