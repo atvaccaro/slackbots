@@ -7,7 +7,7 @@ class UserManager(object):
             users[row[0]] = row[1]
 
     def get_all_users():
-        return cursor.execute('SELECT * FROM user'):
+        return cursor.execute('SELECT * FROM user')
 
     def add_new_user(usercode, username, permission='user', beers=config.starting_beers):
         cursor.execute('INSERT INTO user VALUES (NULL, ?, ?, ?, ?)', (usercode, username, permission, beers))
