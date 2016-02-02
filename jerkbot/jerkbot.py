@@ -1,8 +1,7 @@
 import time, json
-import permissions, users, beers, commands, reddit, define
 from slackclient import SlackClient
 from praw import Reddit
-from config import slack_token, slack_usercode, slack_username
+from config import slack_token, slack_usercode, slack_username, reddit_user_agent
 import signal, sys
 
 def signal_handler(signal, frame):
@@ -12,16 +11,19 @@ def signal_handler(signal, frame):
         sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
-sc = SlackClient(token)
+sc = SlackClient(slack_token)
+r = Reddit(user_agent=reddit_user_agent)
 if sc.rtm_connect():
     # Get our list of users
     users = sc.api_call('users.list')
-    time_since_last_circlejerk = 30
+    time_since_last_circlejerk = 3600
     while True:
-        if time_since_last_circlejerk == 30:
-            # Get top /r/circlejerk submission and post to #random
-            submission = r.get_subreddit('circlejerk').get_hot().next()
-            sc.api_call('chat.postMessage', channel='random', text=submission.title, token=token, username=slack_username, as_user='true')
+        if time_since_last_circlejerk == 60*60:
+            submissions = r.get_subreddit('SubredditSimulator').get_hot(limit=5)
+            for submission in submissions:
+                if not submission.stickied:
+                    sc.api_call('chat.postMessage', channel='#slackbots', text=submission.short_link, token=slack_token, username=slack_username, as_user='true')
+                    break
             time_since_last_circlejerk = 0
 
         time_since_last_circlejerk += 1
