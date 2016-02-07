@@ -4,6 +4,10 @@ from permissions import PermissionManager
 from db import cursor
 
 pm = PermissionManager()
+r = Reddit(user_agent=reddit_user_agent)
+
+def circlejerk():
+
 
 def xkcd(number=None,text=None):
     if number:

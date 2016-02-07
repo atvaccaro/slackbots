@@ -1,3 +1,5 @@
+import db
+from permissions import *
 import time, json
 from slackclient import SlackClient
 from praw import Reddit
@@ -6,7 +8,7 @@ import signal, sys
 
 def signal_handler(signal, frame):
         print 'Saving to db...'
-        permissions.save_to_db()
+        pm.save_to_db()
         print 'Shutting down. Bye!'
         sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
@@ -15,7 +17,10 @@ sc = SlackClient(slack_token)
 r = Reddit(user_agent=reddit_user_agent)
 if sc.rtm_connect():
     # Get our list of users
-    users = sc.api_call('users.list')
+    userlist = sc.api_call('users.list')
+    for user in userlist['members']:
+        permissions.update_permission(user['id'], Permission.USER)
+
     time_since_last_circlejerk = 3600
     while True:
         if time_since_last_circlejerk == 60*60:

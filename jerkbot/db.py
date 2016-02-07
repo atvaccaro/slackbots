@@ -4,6 +4,6 @@ from config import dbfile
 conn = sqlite3.connect(dbfile)
 cursor = conn.cursor()
 
-if not os.path.exists(dbfile):
-    cursor.execute('CREATE TABLE user(nickid INTEGER PRIMARY KEY, usercode TEXT UNIQUE, username TEXT, permission INTEGER, beer INTEGER)')
+if not cursor.execute('SELECT name FROM sqlite_master WHERE type="table"').fetchall():
+    cursor.execute('CREATE TABLE user(nickid INTEGER PRIMARY KEY, usercode TEXT, username TEXT, permission INTEGER, beer INTEGER)')
     conn.commit()
