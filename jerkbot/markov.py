@@ -11,28 +11,28 @@ class Markov(object):
         self.word_size = len(self.words)
         self.database()
 
-    def triples(self):
+    def doubles(self):
         if len(self.words) < 3:
             return
 
-        for i in range(len(self.words) - 2):
-            yield (self.words[i], self.words[i+1], self.words[i+2])
+        for i in range(len(self.words) - 1):
+            yield (self.words[i], self.words[i+1])
 
     def database(self):
-        for w1, w2, w3 in self.triples():
-            key = (w1, w2)
+        for w1, w2 in self.doubles():
+            key = (w1)
             if key in self.cache:
-                self.cache[key].append(w3)
+                self.cache[key].append(w2)
             else:
-                self.cache[key] = [w3]
+                self.cache[key] = [w2]
 
     def generate_markov_text(self, size=25):
-        seed = random.randint(0, self.word_size-3)
-        seed_word, next_word = self.words[seed], self.words[seed+1]
-        w1, w2 = seed_word, next_word
+        seed = random.randint(0, self.word_size-2)
+        seed_word = self.words[seed]
+        w1 = seed_word
         gen_words = []
         for i in xrange(size):
             gen_words.append(w1)
-            w1, w2 = w2, random.choice(self.cache[(w1, w2)])
-        gen_words.append(w2)
+            w1 = random.choice(self.cache[(w1)])
+        gen_words.append(w1)
         return ' '.join(gen_words)
