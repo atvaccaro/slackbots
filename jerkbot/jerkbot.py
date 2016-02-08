@@ -1,5 +1,6 @@
 import db
 from permissions import *
+from commands import *
 import time, json
 from slackclient import SlackClient
 from praw import Reddit
@@ -15,23 +16,16 @@ signal.signal(signal.SIGINT, signal_handler)
 
 sc = SlackClient(slack_token)
 r = Reddit(user_agent=reddit_user_agent)
-if sc.rtm_connect():
-    # Get our list of users
+
+# Get our list of Slack
     userlist = sc.api_call('users.list')
     for user in userlist['members']:
         permissions.update_permission(user['id'], Permission.USER)
 
-    time_since_last_circlejerk = 3600
+# monitor Slack RTM
+if sc.rtm_connect():
     while True:
-        if time_since_last_circlejerk == 60*60:
-            submissions = r.get_subreddit('SubredditSimulator').get_hot(limit=5)
-            for submission in submissions:
-                if not submission.stickied:
-                    sc.api_call('chat.postMessage', channel='#slackbots', text=submission.short_link, token=slack_token, username=slack_username, as_user='true')
-                    break
-            time_since_last_circlejerk = 0
-
-        time_since_last_circlejerk += 1
-        time.sleep(1)
+        for message in sc.rtm_read():
+            continue
 else:
     print "Connection Failed, invalid token?"

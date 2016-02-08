@@ -1,11 +1,10 @@
 import db
 from db import cursor
 
-class Permission(object):
-    USER = 0
-    MODERATOR = 1
-    ADMIN = 2
-    SUPERADMIN = 3
+USER = 0
+MODERATOR = 1
+ADMIN = 2
+SUPERADMIN = 3
 
 def save_to_db():
     for usercode,permission in permissions.iteritems():
@@ -15,7 +14,7 @@ def get_permission(usercode):
     return permissions[usercode]
 
 def is_admin(usercode):
-    return permissions[usercode] >= Permission.ADMIN
+    return permissions[usercode] >= ADMIN
 
 def get_all_permissions():
     return cursor.execute('SELECT usercode, permission FROM user')
