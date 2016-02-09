@@ -1,4 +1,4 @@
-import random
+import random, config
 from db import cursor
 
 class Markov(object):
@@ -26,7 +26,7 @@ class Markov(object):
             else:
                 self.cache[key] = [w2]
 
-    def generate_markov_text(self, size=25):
+    def generate_markov_text(self, size=config.default_markov_length):
         seed = random.randint(0, self.word_size-2)
         seed_word = self.words[seed]
         w1 = seed_word

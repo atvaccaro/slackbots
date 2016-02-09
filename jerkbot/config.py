@@ -4,3 +4,4 @@ slack_usercode = 'idk yet'
 dbfile = 'jerkbot.db'
 reddit_user_agent = 'osx:com.atvaccaro.jerkbot:v0.1 (by /u/theplague42)'
 starting_beers = 3
+default_markov_length = 40
