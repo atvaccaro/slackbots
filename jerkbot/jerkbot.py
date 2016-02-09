@@ -30,7 +30,7 @@ if sc.rtm_connect():
                     userlist = um.get_all_users()
                     usercodes = [key for key, value in userlist.items() if value==text[1]]
                     usercode = usercodes[0]
-                    text = commands.imitate(usercode)
+                    text = commands.imitate(usercode).encode('ascii','ignore')
                     sc.api_call('chat.postMessage', channel=message['channel'], text=text, token=slack_token, username=slack_username, as_user='true')
 else:
     print "Connection Failed, invalid token?"
