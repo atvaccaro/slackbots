@@ -1,9 +1,11 @@
 import os
 import json
+import re
 from db import cursor, conn
 import config, permissions
 
-base_directory = 'lol-xd'#raw_input('Dir name: ')
+DEBUG = False
+base_directory = 'histories/lol-xd' #raw_input('Dir name: ')
 # Import users first
 for root, subdirs, filenames in os.walk(base_directory):
     for filename in filenames:
@@ -15,14 +17,20 @@ for root, subdirs, filenames in os.walk(base_directory):
                 for user in data:
                     try:
                         print 'Loading ' + user['name']
-                        cursor.execute('INSERT INTO user VALUES(?, ?, ?, ?)', (user['id'], user['name'], permissions.USER, config.starting_beers))
+                        if not DEBUG: cursor.execute('INSERT INTO user VALUES(?, ?, ?, ?)', (user['id'], user['name'], permissions.USER, config.starting_beers))
                         conn.commit()
                     except Exception, e:
                         print str(e)
             else:
                 for message in data:
                     try:
-                        cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], message['text']))
+                        if not message.get('subtype'): #assume anything without a subtype is a regular message
+                            text = message['text']
+                            text = re.sub(r'<([^>]+)>', '', text)
+                            text = re.sub(r'[^\w]', ' ', text).encode('ascii','ignore')
+                            print text
+                            if not DEBUG: cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
                     except Exception, e:
                         print str(e)
                 conn.commit()
+if DEBUG: print "WARNING: WAS RUN IN DEBUG MODE; NOTHING SAVED TO DB"
