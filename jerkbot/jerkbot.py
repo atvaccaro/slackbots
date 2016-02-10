@@ -28,7 +28,7 @@ if sc.rtm_connect():
                 print message
                 if text[0] == '!markov':
                     userlist = um.get_all_users()
-                    usercodes = [key for key, value in userlist.items() if value==text[1]]
+                    usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
                     usercode = usercodes[0]
                     text = commands.imitate(usercode).encode('ascii','ignore')
                     sc.api_call('chat.postMessage', channel=message['channel'], text=text, token=slack_token, username=slack_username, as_user='true')

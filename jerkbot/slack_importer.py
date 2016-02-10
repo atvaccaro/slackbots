@@ -5,7 +5,7 @@ from db import cursor, conn
 import config, permissions
 
 DEBUG = False
-base_directory = 'histories/lol-xd' #raw_input('Dir name: ')
+base_directory = raw_input('Dir name: ')
 # Import users first
 for root, subdirs, filenames in os.walk(base_directory):
     for filename in filenames:
@@ -26,8 +26,10 @@ for root, subdirs, filenames in os.walk(base_directory):
                     try:
                         if not message.get('subtype'): #assume anything without a subtype is a regular message
                             text = message['text']
-                            text = re.sub(r'<([^>]+)>', '', text)
-                            text = re.sub(r'[^\w]', ' ', text).encode('ascii','ignore')
+                            text = text.replace("'", '') #remove apostrophes
+                            text = re.sub(r'[`]+[^`]+[`]+', '', text) #triple code tags
+                            text = re.sub(r'<[^>]+>', '', text) #urls
+                            text = re.sub(r'[^a-zA-Z]', ' ', text).encode('ascii','ignore') #non-alphanumerics, ascii
                             print text
                             if not DEBUG: cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
                     except Exception, e:
