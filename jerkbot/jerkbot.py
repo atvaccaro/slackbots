@@ -31,13 +31,14 @@ if sc.rtm_connect():
     while True:
         for message in sc.rtm_read():
             print message
-            if message['type'] == 'message' and message.get('text')[0][0] == '!' and message['user'] != slack_usercode:
+            if message.get('type') == 'message' and message.get('text') and message.get('user') != slack_usercode:
                 text = message['text'].split()
-                try:
-                    text = bot_commands.get(text[0])(message['text'].split())
-                except KeyError:
-                    text = 'Command not found.'
-                print 'making api call'
-                sc.api_call('chat.postMessage', channel=message['channel'], text=text, token=slack_token, username=slack_username, as_user='true')
+                if text[0][0] == '!':
+                    try:
+                        text = bot_commands.get(text[0])(message['text'].split())
+                    except KeyError:
+                        text = 'Command not found.'
+                    print 'making api call'
+                    sc.api_call('chat.postMessage', channel=message['channel'], text=text, token=slack_token, username=slack_username, as_user='true')
 else:
     print "Connection Failed, invalid token?"
