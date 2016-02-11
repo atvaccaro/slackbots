@@ -23,7 +23,7 @@ class Markov(object):
         output = ''
         for r in range(config.markov_sentences):
             sentence = ' '.join(self.text_model.chain.walk(None))
-            while sentence.count(' ') < config.markov_sentence_length:
+            while len(sentence.split()) < config.markov_sentence_length:
                 sentence = ' '.join(self.text_model.chain.walk(None))
 
             sentence = sentence.replace('.', '').strip()
