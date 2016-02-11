@@ -1,5 +1,4 @@
 import requests, random
-from datetime import datetime
 
 import permissions
 from db import cursor
@@ -17,15 +16,14 @@ def imitate(text):
     print text
     userlist = um.get_all_users()
     try:
-        usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
-        my_usercode = usercodes[0]
+        usercode = [key for key, value in userlist.items() if value==text[1].replace('@', '')][0]
     except IndexError:
         return 'Error: unknown or missing user'
     
-    if my_usercode not in markov_chains:
-        markov_chains[my_usercode] = Markov(my_usercode)
+    if usercode not in markov_chains:
+        markov_chains[usercode] = Markov(usercode)
     
-    message = markov_chains[usercodes[0]].generate_markov_text()
+    message = markov_chains[usercode].generate_markov_text()
     return message
 
 def circlejerk():

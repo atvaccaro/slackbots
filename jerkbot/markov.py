@@ -1,9 +1,8 @@
-import re, sys, os, pickle
+import re, sys, os
 import config
 from db import cursor
 sys.path.insert(1, os.path.join(sys.path[0], '../markovify'))
 import markovify
-from datetime import datetime
 
 class Markov(object):
     def __init__(self, usercode):
