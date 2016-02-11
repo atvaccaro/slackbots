@@ -1,4 +1,5 @@
 import requests, random
+from datetime import datetime
 
 import permissions
 from db import cursor
@@ -10,16 +11,22 @@ from praw import Reddit
 
 r = Reddit(user_agent=reddit_user_agent)
 um = UserManager()
+markov_chains = {}
 
 def imitate(text):
     print text
     userlist = um.get_all_users()
     try:
         usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
-        markov = Markov(usercodes[0])
-        return markov.generate_markov_text()
+        my_usercode = usercodes[0]
     except IndexError:
-        return "Error: unknown or missing user"
+        return 'Error: unknown or missing user'
+    
+    if my_usercode not in markov_chains:
+        markov_chains[my_usercode] = Markov(my_usercode)
+    
+    message = markov_chains[usercodes[0]].generate_markov_text()
+    return message
 
 def circlejerk():
     submission = get_subreddit_hot('circlejerk')
