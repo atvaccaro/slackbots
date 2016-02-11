@@ -23,5 +23,8 @@ class Markov(object):
         
         while not message.endswidth(end_char):
             message += ' ' + self.chain.move(message.rsplit(' ',1)[-1])[0]
-        
+
+            if message.count(' ') > config.default_markov_length:
+                return message[1:]
+
         return message[1:-1]
