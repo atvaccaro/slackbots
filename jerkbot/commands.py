@@ -14,9 +14,12 @@ um = UserManager()
 def imitate(text):
     print text
     userlist = um.get_all_users()
-    usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
-    markov = Markov(usercodes[0])
-    return markov.generate_markov_text()
+    try:
+        usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
+        markov = Markov(usercodes[0])
+        return markov.generate_markov_text()
+    except IndexError:
+        return "Error: unknown or missing user"
 
 def circlejerk():
     submission = get_subreddit_hot('circlejerk')

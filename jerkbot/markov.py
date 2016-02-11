@@ -1,16 +1,17 @@
 import config
-import pykov
 from db import cursor
+import markovify
 
 class Markov(object):
     def __init__(self, usercode):
-        self.chain = pykov.Chain()
-        words = []
+        words = ''
         for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,)):
-                words.extend(row[0].split())
+            word = ' '.join(row[0].split()) + '. '
+            word = word[0].upper() + word[1:]
+            words += word
 
-        for w,word in enumerate(words[:-1]):
-            self.chain[(word, words[w+1])] += 1
+        self.text_model = markovify.Text(words)
+
 
     def generate_markov_text(self, size=config.default_markov_length):
-        return ' '.join(self.chain.walk(size))
+        return ' '.join(self.text_model.chain.walk(None))
