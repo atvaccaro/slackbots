@@ -26,10 +26,10 @@ for root, subdirs, filenames in os.walk(base_directory):
                     try:
                         if not message.get('subtype'): #assume anything without a subtype is a regular message
                             text = message['text']
-                            text = text.replace("'", '') #remove apostrophes
                             text = re.sub(r'[`]+[^`]+[`]+', '', text) #triple code tags
                             text = re.sub(r'<[^>]+>', '', text) #urls
-                            text = re.sub(r'[^a-zA-Z:]', ' ', text).encode('ascii','ignore') #non-alphanumerics, ascii
+                            text = re.sub(r"[^a-zA-Z']", ' ', text).encode('ascii','ignore') #non-alphanumerics, asciiz
+                            text = start_char + text + end_char
                             print text
                             if not DEBUG: cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
                     except Exception, e:
