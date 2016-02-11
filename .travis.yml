@@ -1,6 +1,9 @@
 language: python
 python:
     - "2.7"
+before_install:
+    - apt-get install enchant
+    - apt-get install aspell-en enchant-aspell
 install:
     - yum install enchant
     - pip install -r requirements.txt
