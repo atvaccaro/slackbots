@@ -4,19 +4,19 @@ import permissions
 from db import cursor
 from markov import Markov
 from config import reddit_user_agent
+from users import UserManager
 
 from praw import Reddit
 
 r = Reddit(user_agent=reddit_user_agent)
+um = UserManager()
 
-def imitate(usercode=None, username=None):
-    if usercode:
-        markov = Markov(usercode=usercode)
-        return markov.generate_markov_text()
-    elif username:
-        return
-    else:
-        return
+def imitate(text):
+    print text
+    userlist = um.get_all_users()
+    usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
+    markov = Markov(usercodes[0])
+    return markov.generate_markov_text()
 
 def circlejerk():
     submission = get_subreddit_hot('circlejerk')

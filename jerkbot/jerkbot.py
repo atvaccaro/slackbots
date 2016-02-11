@@ -1,6 +1,6 @@
 import db
 from permissions import *
-import commands
+import commands, define
 import time, json
 from slackclient import SlackClient
 from praw import Reddit
@@ -19,18 +19,25 @@ sc = SlackClient(slack_token)
 r = Reddit(user_agent=reddit_user_agent)
 um = UserManager()
 
-# monitor Slack RTM
+bot_commands = {
+    '!markov': commands.imitate,
+    '!urban': define.urban_define,
+}
+
+def not_found():
+    return 'Command not found.'
+
 if sc.rtm_connect():
     while True:
         for message in sc.rtm_read():
-            if message['type'] == 'message' and message.get('text'):
+            print message
+            if message['type'] == 'message' and message.get('text')[0][0] == '!' and message['user'] != slack_usercode:
                 text = message['text'].split()
-                print message
-                if text[0] == '!markov':
-                    userlist = um.get_all_users()
-                    usercodes = [key for key, value in userlist.items() if value==text[1].replace('@', '')]
-                    usercode = usercodes[0]
-                    text = commands.imitate(usercode).encode('ascii','ignore')
-                    sc.api_call('chat.postMessage', channel=message['channel'], text=text, token=slack_token, username=slack_username, as_user='true')
+                try:
+                    text = bot_commands.get(text[0])(message['text'].split())
+                except KeyError:
+                    text = 'Command not found.'
+                print 'making api call'
+                sc.api_call('chat.postMessage', channel=message['channel'], text=text, token=slack_token, username=slack_username, as_user='true')
 else:
     print "Connection Failed, invalid token?"

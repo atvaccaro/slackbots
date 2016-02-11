@@ -3,17 +3,14 @@ import pykov
 from db import cursor
 
 class Markov(object):
-    def __init__(self, usercode=None, username=None):
+    def __init__(self, usercode):
         self.chain = pykov.Chain()
         words = []
-        if usercode:
-            for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,)):
+        for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,)):
                 words.extend(row[0].split())
-
-        for w,word in enumerate(self.words):
+        for w,word in enumerate(words):
             self.chain[(words, words[w+1])] += 1
 
 
     def generate_markov_text(self, size=config.default_markov_length):
-        gen_words = self.chain.walk(size)
-        return ' '.join(gen_words)
+        ''.join(self.chain.walk(size))
