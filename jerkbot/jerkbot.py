@@ -31,7 +31,7 @@ if sc.rtm_connect():
     while True:
         for message in sc.rtm_read():
             print message
-            if message.get('type') == 'message' and message['text']:
+            if message.get('type') == 'message' and message.get('text'):
                 text = message['text'].split()
                 if text[0] in bot_commands.keys():
                     text = bot_commands.get(text[0])(message['text'].split())
