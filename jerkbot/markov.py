@@ -13,5 +13,5 @@ class Markov(object):
         self.text_model = markovify.Text(words)
 
 
-    def generate_markov_text(self, size=config.default_markov_length):
+    def generate_markov_text(self):
         return ' '.join(self.text_model.chain.walk(None))
