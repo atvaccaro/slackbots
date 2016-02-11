@@ -12,8 +12,16 @@ class Markov(object):
 
         for w,word in enumerate(self.words):
             self.chain[(words, words[w+1])] += 1
+        
+        self.chain.normalize()
 
 
-    def generate_markov_text(self, size=config.default_markov_length):
-        gen_words = self.chain.walk(size)
-        return ' '.join(gen_words)
+    def generate_markov_text(self):
+        message = self.chain.walk(0)[0]
+        while not message.startswith(start_char):
+            message = self.chain.walk(0)[0]
+        
+        while not message.endswidth(end_char):
+            message += ' ' + self.chain.move(message.rsplit(' ',1)[-1])[0]
+        
+        return message[1:-1]
