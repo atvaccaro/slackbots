@@ -34,9 +34,11 @@ class Markov(object):
     def generate_markov_text(self):
         output = ''
         for r in range(config.markov_sentences):
+            attempts = 0
             sentence = ' '.join(self.text_model.chain.walk(None))
-            while len(sentence.split()) < config.markov_sentence_length:
+            while attempts < 100 and len(sentence.split()) < config.markov_sentence_length:
                 sentence = ' '.join(self.text_model.chain.walk(None))
+                attempts += 1
 
             sentence = sentence.replace('.', '').strip()
             output += sentence + '. '
