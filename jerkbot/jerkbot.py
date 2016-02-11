@@ -31,7 +31,7 @@ if sc.rtm_connect():
     while True:
         for message in sc.rtm_read():
             print message
-            if message['type'] == 'message' and message.get('text')[0][0] == '!' and message['user'] != slack_usercode:
+            if message is not None and message['type'] == 'message' and message.get('text')[0][0] == '!' and message['user'] != slack_usercode:
                 text = message['text'].split()
                 try:
                     text = bot_commands.get(text[0])(message['text'].split())
