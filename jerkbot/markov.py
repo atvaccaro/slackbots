@@ -1,17 +1,23 @@
+import re
 import config
 from db import cursor
 import markovify
 
 class Markov(object):
     def __init__(self, usercode):
-        words = ''
+        message_history = ''
         for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,)):
-            word = ' '.join(row[0].split()) + '. '
-            word = word[0].upper() + word[1:]
-            words += word
+            sentence = re.sub(r'\s', ' ', row[0])
+            if not sentence.endswith('.'):
+                sentence += '. '
+            sentence = sentence[0].upper() + sentence[1:]
+            message_history += sentence
 
-        self.text_model = markovify.Text(words)
+        self.text_model = markovify.Text(message_history)
 
 
     def generate_markov_text(self):
-        return ' '.join(self.text_model.chain.walk(None))
+        output = ''
+        for r in range(config.markov_sentences):
+            output += ' '.join(self.text_model.chain.walk(None)) + ' '
+        return output[:-1]
