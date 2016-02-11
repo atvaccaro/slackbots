@@ -10,7 +10,7 @@ base_directory = raw_input('Dir name: ')
 # Import users first
 for root, subdirs, filenames in os.walk(base_directory):
     for filename in filenames:
-        if filename in ('channels.json', 'integration_logs.json'):
+        if filename in ('channels.json', 'integration_logs.json', '.DS_Store'):
             continue
         with open(os.path.join(root, filename)) as f:
             data = json.loads(f.read())
