@@ -1,10 +1,11 @@
 import os
 import json
 import re
+import enchant
 from db import cursor, conn
 import config, permissions
 
-
+checker = enchant.Dict('en_US')
 DEBUG = False
 base_directory = raw_input('Dir name: ')
 # Import users first
@@ -27,11 +28,35 @@ for root, subdirs, filenames in os.walk(base_directory):
                     try:
                         if not message.get('subtype'): #assume anything without a subtype is a regular message
                             text = message['text']
+                            # Ignore messages that are ! commands
+                            if text.startswith('!'):
+                                continue
+
                             text = re.sub(r'[`]+[^`]+[`]+', '', text) #triple code tags
                             text = re.sub(r'<[^>]+>', '', text) #urls
                             text = re.sub(r"[^a-zA-Z':_]", ' ', text).encode('ascii','ignore') #non-alphanumerics, asciiz
+                            text = re.sub(r'\s*\.\s*', '', text) #remove stray periods
+                            
+                            text = text.strip()
+                            
+                            # Spellchecker
+                            if text != '':
+                                words = text.split()
+                                for w, word in enumerate(words):
+                                    if (word not in config.word_whitelist) and (
+                                        word != word.lower()) and (checker.check(word.lower())):
+                                        words[w] = word.lower()
+                                    
+                                    if words[w] == 'i':
+                                        words[w] = 'I'
+                                    
+                                text = ' '.join(words)
+
+                                text = text[0].upper() + text[1:] + '. ' #capitalize
                             #print text
-                            if not DEBUG: cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
+
+                            if text and not DEBUG:
+                                cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
                     except Exception, e:
                         print str(e)
                 conn.commit()
