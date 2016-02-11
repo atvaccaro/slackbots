@@ -1,7 +1,8 @@
-import re
+import re, sys, os
 import config
 from db import cursor
-import markovify
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import markovify.markovify
 
 class Markov(object):
     def __init__(self, usercode):
