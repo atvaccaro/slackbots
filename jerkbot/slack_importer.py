@@ -29,7 +29,7 @@ for root, subdirs, filenames in os.walk(base_directory):
                             text = message['text']
                             text = re.sub(r'[`]+[^`]+[`]+', '', text) #triple code tags
                             text = re.sub(r'<[^>]+>', '', text) #urls
-                            text = re.sub(r"[^a-zA-Z':]", ' ', text).encode('ascii','ignore') #non-alphanumerics, asciiz
+                            text = re.sub(r"[^a-zA-Z':_]", ' ', text).encode('ascii','ignore') #non-alphanumerics, asciiz
                             #print text
                             if not DEBUG: cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
                     except Exception, e:
