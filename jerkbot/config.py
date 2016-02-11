@@ -5,3 +5,4 @@ dbfile = 'jerkbot.db'
 reddit_user_agent = 'osx:com.atvaccaro.jerkbot:v0.1 (by /u/theplague42)'
 starting_beers = 3
 markov_sentences = 3
+markov_sentence_length = 7
