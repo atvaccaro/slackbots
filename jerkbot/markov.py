@@ -8,9 +8,9 @@ class Markov(object):
         words = []
         for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,)):
                 words.extend(row[0].split())
-        for w,word in enumerate(words):
+
+        for w,word in enumerate(words[:-1]):
             self.chain[(word, words[w+1])] += 1
-        self.chain.normalize()
 
     def generate_markov_text(self, size=config.default_markov_length):
-        ''.join(self.chain.walk(size))
+        return ' '.join(self.chain.walk(size))
