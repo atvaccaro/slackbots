@@ -4,6 +4,7 @@ import re
 from db import cursor, conn
 import config, permissions
 
+
 DEBUG = False
 base_directory = raw_input('Dir name: ')
 # Import users first
@@ -29,8 +30,7 @@ for root, subdirs, filenames in os.walk(base_directory):
                             text = re.sub(r'[`]+[^`]+[`]+', '', text) #triple code tags
                             text = re.sub(r'<[^>]+>', '', text) #urls
                             text = re.sub(r"[^a-zA-Z']", ' ', text).encode('ascii','ignore') #non-alphanumerics, asciiz
-                            text = start_char + text + end_char
-                            print text
+                            #print text
                             if not DEBUG: cursor.execute('INSERT INTO message VALUES(?, ?)', (message['user'], text))
                     except Exception, e:
                         print str(e)
