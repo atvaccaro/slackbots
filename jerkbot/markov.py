@@ -2,15 +2,15 @@ import re, sys, os
 import enchant
 import config
 from db import cursor
-sys.path.insert(1, os.path.join(os.path.dirname(os.getcwd()), 'markovify'))
-import markovify
+from markovify import markovify
+
 
 class Markov(object):
     def __init__(self, usercode):
         message_history = ''
         messages = [row[0] for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,))]
         self.text_model = markovify.Text('. '.join(messages))
-        
+
 
     def generate_markov_text(self):
         output = ''
