@@ -1,3 +1,4 @@
 [submodule "markovify"]
 	path = markovify
-    	url = https://github.com/atvaccaro/markovify.git
+    url = https://github.com/atvaccaro/markovify.git
+    branch = master
