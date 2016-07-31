@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-import chungisms, morse_script, hashlib
+import chungisms, morse_script, hashlib, duck
 
 app = Flask(__name__)
 
@@ -50,6 +50,14 @@ def md5():
             return 'You need to add text to hash'
     else:
         return 'You shall not GET!'
+
+
+@app.route('/duck', methods=['POST'])
+def duck():
+    if request.form['text']:
+        return jsonify(response_type='in_channel', text=duck.get(request.form['text']))
+    else:
+        return 'You need to add text to search for'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
