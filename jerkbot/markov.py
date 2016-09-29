@@ -1,5 +1,3 @@
-import re, sys, os
-import enchant
 import config
 from db import cursor
 from markovify import markovify
