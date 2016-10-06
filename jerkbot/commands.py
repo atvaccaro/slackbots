@@ -1,15 +1,11 @@
 import requests, random
 
-import permissions
-from db import cursor
 from markov import Markov
 from config import reddit_user_agent
-from users import UserManager
 
 from praw import Reddit
 
 r = Reddit(user_agent=reddit_user_agent)
-um = UserManager()
 markov_chains = {}
 
 def imitate(text):
@@ -25,10 +21,6 @@ def imitate(text):
     
     message = markov_chains[usercode].generate_markov_text()
     return message
-
-def circlejerk():
-    submission = get_subreddit_hot('circlejerk')
-    sc.api_call('chat.postMessage', channel='#slackbots', text=submission.short_link, token=slack_token, username=slack_username, as_user='true')
 
 def get_subreddit_hot(subreddit):
     submissions = r.get_subreddit(subreddit).get_hot(limit=5)

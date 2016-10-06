@@ -32,6 +32,9 @@ for root, subdirs, filenames in os.walk(base_directory):
                             if text.startswith('!'):
                                 continue
 
+                            for emoji in re.findall(r'(:[a-z0-9_]+:)', text):
+                                if not DEBUG: cursor.execute('INSERT INTO emoji VALUES (?)', (emoji,))
+
                             text = re.sub(r'[`]+[^`]+[`]+', '', text) #triple code tags
                             text = re.sub(r'<[^>]+>', '', text) #urls
                             text = re.sub(r"[^a-zA-Z':_]", ' ', text).encode('ascii','ignore') #non-alphanumerics, asciiz

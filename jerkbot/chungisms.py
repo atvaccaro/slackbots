@@ -19,4 +19,4 @@ chungisms = [
 ]
 
 def get_wisdom():
-    return chungisms[random.randrange(len(chungisms))]
+    return random.choice(chungisms)
