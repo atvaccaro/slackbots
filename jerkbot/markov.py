@@ -2,13 +2,17 @@ import config
 from db import cursor
 from markovify import markovify
 
+userlist = {}
+for row in cursor.execute('SELECT usercode, username FROM user'):
+    userlist[row[0]] = row[1]
+markov_chains = {}
+print userlist
 
 class Markov(object):
     def __init__(self, usercode):
         message_history = ''
         messages = [row[0] for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,))]
         self.text_model = markovify.Text('. '.join(messages))
-
 
     def generate_markov_text(self):
         output = ''
@@ -24,7 +28,15 @@ class Markov(object):
 
         return output[:-1]
 
-if __name__ == '__main__':
-    markov = Markov('U09F9MTNW')
-    message = markov.generate_markov_text()
-    print(message)
+
+def imitate(username):
+    try:
+        usercode = [key for key, value in userlist.items() if value == username.replace('@', '')][0]
+    except IndexError:
+        return 'Error: unknown or missing user'
+
+    if usercode not in markov_chains:
+        markov_chains[usercode] = Markov(usercode)
+
+    message = markov_chains[usercode].generate_markov_text()
+    return message
