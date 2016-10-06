@@ -5,12 +5,17 @@ from config import reddit_user_agent
 
 from praw import Reddit
 
+from db import cursor
+
 r = Reddit(user_agent=reddit_user_agent)
 markov_chains = {}
 
+userlist = {}
+for row in cursor.execute('SELECT usercode,username FROM user'):
+    userlist[row[0]] = row[1]
+
 def imitate(text):
     print text
-    userlist = um.get_all_users()
     try:
         usercode = [key for key, value in userlist.items() if value==text[1].replace('@', '')][0]
     except IndexError:
@@ -27,7 +32,6 @@ def get_subreddit_hot(subreddit):
     for submission in submissions:
         if not submission.stickied:
             return submission
-            break
 
 def xkcd(number=None,text=None):
     if number:
