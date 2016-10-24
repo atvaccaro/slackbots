@@ -5,7 +5,7 @@ urban_base_url = 'http://api.urbandictionary.com/v0/define?term='
 
 def urban_define(text):
     opener = urllib2.build_opener()
-    the_page = opener.open(urban_base_url + ''.join(text[1:]).replace(' ', '+'))
+    the_page = opener.open(urban_base_url + ''.join(text).replace(' ', '+'))
 
     json_page = json.load(the_page)
 
