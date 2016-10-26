@@ -3,7 +3,7 @@ import json
 import re
 import enchant
 from db import cursor, conn
-import config, permissions
+import config
 
 checker = enchant.Dict('en_US')
 DEBUG = False
