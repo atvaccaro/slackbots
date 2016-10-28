@@ -15,8 +15,9 @@ chungisms = [
     'At Harvard business school, the classes are very interactive and the students actively participate.',
     'All boys liking Mary does not imply Mary likes all boys.',
     'Your work demonstrates a deep understanding of requirements engineering.',
-    #'If you do not know this key thing, you are not software engineer...',
+    # 'If you do not know this key thing, you are not software engineer...',
 ]
 
-def get_wisdom():
+
+def get_wisdom(arg):
     return random.choice(chungisms)

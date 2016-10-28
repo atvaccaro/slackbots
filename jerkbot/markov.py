@@ -6,11 +6,11 @@ userlist = {}
 for row in cursor.execute('SELECT usercode, username FROM user'):
     userlist[row[0]] = row[1]
 markov_chains = {}
-print userlist
+print(userlist)
+
 
 class Markov(object):
     def __init__(self, usercode):
-        message_history = ''
         messages = [row[0] for row in cursor.execute('SELECT body FROM message WHERE usercode=?', (usercode,))]
         self.text_model = markovify.Text('. '.join(messages))
 
@@ -38,5 +38,4 @@ def imitate(username):
     if usercode not in markov_chains:
         markov_chains[usercode] = Markov(usercode)
 
-    message = markov_chains[usercode].generate_markov_text()
-    return message
+    return markov_chains[usercode].generate_markov_text()

@@ -1,4 +1,6 @@
-import os, sqlite3
+import os
+import sqlite3
+
 from config import dbfile
 
 conn = sqlite3.connect(dbfile)

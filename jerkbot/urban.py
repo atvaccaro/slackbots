@@ -3,6 +3,7 @@ import json
 
 urban_base_url = 'http://api.urbandictionary.com/v0/define?term='
 
+
 def urban_define(text):
     opener = urllib2.build_opener()
     the_page = opener.open(urban_base_url + ''.join(text).replace(' ', '+'))
@@ -14,8 +15,10 @@ def urban_define(text):
     except Exception:
         return 'No definition found. :disappointed:'
 
+
 def define(term):
     pass
+
 
 def get_synonyms(term):
     pass
