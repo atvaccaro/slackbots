@@ -19,5 +19,5 @@ chungisms = [
 ]
 
 
-def get_wisdom(arg):
+def get_wisdom():
     return random.choice(chungisms)
